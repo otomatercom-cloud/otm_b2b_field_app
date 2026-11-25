@@ -27,7 +27,11 @@ jobs:
           open(p, 'w').write(s)
           PY
       - run: flutter pub get
-      - run: flutter build apk --release
+      - name: Build release APK (server + DB baked in)
+        env:
+          SERVER_URL: ${{ secrets.SERVER_URL }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+        run: flutter build apk --release --dart-define=SERVER_URL="$SERVER_URL" --dart-define=DB_NAME="$DB_NAME"
       - uses: actions/upload-artifact@v4
         with:
           name: otm-b2b-field-app-apk

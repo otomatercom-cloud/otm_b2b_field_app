@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../api_client.dart';
+import '../app_config.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,8 +12,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _serverCtrl = TextEditingController(text: 'https://your-odoo-server.com');
-  final _dbCtrl = TextEditingController();
+  final _serverCtrl = TextEditingController(text: AppConfig.isLocked ? AppConfig.serverUrl : 'https://');
+  final _dbCtrl = TextEditingController(text: AppConfig.dbName);
   final _loginCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   bool _busy = false;
@@ -60,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Text('Logic School of Management',
                       textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
                   const SizedBox(height: 32),
+                  if (!AppConfig.isLocked) ...[
                   TextFormField(
                     controller: _serverCtrl,
                     decoration: const InputDecoration(labelText: 'Server URL', prefixIcon: Icon(Icons.dns)),
@@ -73,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
+                  ],
                   TextFormField(
                     controller: _loginCtrl,
                     decoration: const InputDecoration(labelText: 'Email / Username', prefixIcon: Icon(Icons.person)),

@@ -68,6 +68,9 @@ class ApiClient {
     required String password,
   }) async {
     baseUrl = serverUrl.trim();
+    if (!baseUrl!.toLowerCase().startsWith('https://')) {
+      throw ApiException('Server must use https:// for a secure login.');
+    }
     final resp = await http.post(
       _uri('/otm_b2b/mobile/login'),
       headers: {'Content-Type': 'application/json'},
